@@ -250,7 +250,7 @@ function hashMap() {
       const index = hash(key);
       const pair = [key, get(key)];
       const i = buckets[index].find(pair);
-      console.log(buckets[index].find(pair))
+      console.log(buckets[index].find(pair));
       buckets[index].removeAt(i);
       return true;
     }
@@ -258,14 +258,72 @@ function hashMap() {
   }
 
   function length() {
+    let count = 0;
+    buckets.forEach((element) => {
+      if (element !== undefined) {
+        count += element.getSize();
+      }
+    });
+    return count;
+  }
 
+  function clear() {
+    buckets.length = 0;
+  }
+
+  function keys() {
+    const array = [];
+    buckets.forEach((elements) => {
+      let current = elements.getHead();
+      while (current) {
+        array.push(current.value[0]);
+        current = current.next;
+      }
+    });
+    return array;
+  }
+
+  function values() {
+    const array = [];
+    buckets.forEach((elements) => {
+      let current = elements.getHead();
+      while (current) {
+        array.push(current.value[1]);
+        current = current.next;
+      }
+    });
+    return array;
+  }
+
+  function entries() {
+    const array = [];
+    buckets.forEach((elements) => {
+      let current = elements.getHead();
+      while (current) {
+        array.push([current.value[0], current.value[1]]);
+        current = current.next;
+      }
+    });
+    return array;
   }
 
   function getHashMap() {
-    return buckets[10].getHead();
+    return buckets;
   }
 
-  return { getHashMap, hash, set, get, has, remove,  length };
+  return {
+    getHashMap,
+    hash,
+    set,
+    get,
+    has,
+    remove,
+    length,
+    clear,
+    keys,
+    values,
+    entries
+  };
 }
 
 const test = hashMap();
@@ -277,5 +335,9 @@ test.remove("apple");
 console.log(test.hash("alwnl"));
 console.log(test.get("elppa"));
 console.log(test.has("elppa"));
-
+console.log(test.length());
+console.log(test.keys());
+console.log(test.values());
+console.log(test.entries());
+test.clear();
 console.log(test.getHashMap());
