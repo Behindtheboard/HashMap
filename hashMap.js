@@ -113,6 +113,11 @@ function linkedList() {
       return null;
     } else {
       current = head;
+      if (index <= 1) {
+        newNode.next = current.next;
+        head = newNode;
+        return head;
+      }
       for (i = 2; i < index; i++) {
         current = current.next;
       }
@@ -127,6 +132,10 @@ function linkedList() {
       return null;
     } else {
       current = head;
+      if (index <= 1) {
+        head = current.next;
+        return head;
+      }
       for (i = 2; i < index; i++) {
         current = current.next;
       }
@@ -236,18 +245,37 @@ function hashMap() {
     return false;
   }
 
+  function remove(key) {
+    if (has(key)) {
+      const index = hash(key);
+      const pair = [key, get(key)];
+      const i = buckets[index].find(pair);
+      console.log(buckets[index].find(pair))
+      buckets[index].removeAt(i);
+      return true;
+    }
+    return false;
+  }
+
+  function length() {
+
+  }
+
   function getHashMap() {
     return buckets[10].getHead();
   }
 
-  return { getHashMap, hash, set, get, has };
+  return { getHashMap, hash, set, get, has, remove,  length };
 }
 
 const test = hashMap();
 test.set("apple", "red");
 test.set("apple", "blue");
 test.set("elppa", "yellow");
-console.log(test.get('elppa'))
-console.log(test.has('elppa'))
+test.set("alwnl", "orange");
+test.remove("apple");
+console.log(test.hash("alwnl"));
+console.log(test.get("elppa"));
+console.log(test.has("elppa"));
 
 console.log(test.getHashMap());
