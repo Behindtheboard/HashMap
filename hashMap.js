@@ -89,7 +89,7 @@ function linkedList() {
     let index = 0;
     while (current) {
       index++;
-      if (`${current.value}` === `${value}`) {
+      if (`${current.value[0]}` === `${value[0]}`) {
         return index;
       }
       current = current.next;
@@ -137,22 +137,22 @@ function linkedList() {
 
   function replace(value, index) {
     const newNode = new Node(value);
-    if (index > size) {
+    if (index > size || index === undefined) {
       return null;
     } else {
       current = head;
-      if(index === 1) {
+      if (index === 1) {
+        newNode.next = current.next;
         head = newNode;
-        return head.next = current;
+        return;
       }
       for (i = 2; i < index; i++) {
         current = current.next;
       }
-      newNode.next = current.next;
+      newNode.next = current.next.next;
       current.next = newNode;
     }
   }
-
 
   return {
     append,
@@ -170,6 +170,7 @@ function linkedList() {
     replace,
   };
 }
+
 function hashMap() {
   const buckets = [];
   let max = 16;
@@ -196,25 +197,42 @@ function hashMap() {
       const list = linkedList();
       list.append(pair);
       return (buckets[index] = list);
+    }
+    const i = buckets[index].find(pair);
+    if (pair[0] === buckets[index].at(i).value[0]) {
+      buckets[index].replace(pair, i);
+      return;
     } else {
-      if (bucket[index].contains(pair)) {
-        const i = list.find(pair);
-        return list.replace(pair, i);
-      } else {
-        return buckets[index].append(pair);
-      }
+      buckets[index].append(pair);
+      return;
     }
   }
+
+  function get(key) {
+    const index = hash(key);
+    if (buckets[index] !== undefined) {
+      current = buckets[index].getHead();
+      while (current) {
+        if (current.value[0] === key) {
+          return current.value[1];
+        }
+      }
+    }
+    return null;
+  }
+  
 
   function getHashMap() {
     return buckets[10].getHead();
   }
 
-  return { getHashMap, set, hash };
+  return { getHashMap, set, get, hash };
 }
 
 const test = hashMap();
-test.set('apple', 'red')
-console.log(test.hash('apple'))
+test.set("apple", "red");
+test.set("apple", "blue");
+test.set("elppa", "yellow");
+console.log(test.get("elppa"));
 
 console.log(test.getHashMap());
