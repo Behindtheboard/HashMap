@@ -211,28 +211,43 @@ function hashMap() {
   function get(key) {
     const index = hash(key);
     if (buckets[index] !== undefined) {
-      current = buckets[index].getHead();
+      let current = buckets[index].getHead();
       while (current) {
         if (current.value[0] === key) {
           return current.value[1];
         }
+        current = current.next;
       }
     }
     return null;
   }
-  
+
+  function has(key) {
+    const index = hash(key);
+    if (buckets[index] !== undefined) {
+      let current = buckets[index].getHead();
+      while (current) {
+        if (current.value[0] === key) {
+          return true;
+        }
+        current = current.next;
+      }
+    }
+    return false;
+  }
 
   function getHashMap() {
     return buckets[10].getHead();
   }
 
-  return { getHashMap, set, get, hash };
+  return { getHashMap, hash, set, get, has };
 }
 
 const test = hashMap();
 test.set("apple", "red");
 test.set("apple", "blue");
 test.set("elppa", "yellow");
-console.log(test.get("elppa"));
+console.log(test.get('elppa'))
+console.log(test.has('elppa'))
 
 console.log(test.getHashMap());
